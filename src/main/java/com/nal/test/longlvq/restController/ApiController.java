@@ -1,37 +1,34 @@
 package com.nal.test.longlvq.restController;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nal.test.longlvq.entity.User;
 import com.nal.test.longlvq.entity.Work;
 import com.nal.test.longlvq.exception.ParamException;
 import com.nal.test.longlvq.model.ResponseData;
-import com.nal.test.longlvq.repository.UserRepository;
 import com.nal.test.longlvq.repository.WorkRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ApiController extends BaseController {
-	@Autowired
-	WorkRepository workRepository;
-	@Autowired
-	UserRepository userRepository;
-	@Autowired
-	PasswordEncoder passwordEncoder;
-
+	
+	private final WorkRepository workRepository;
+	
 	static {
 	}
 
 	@GetMapping("/getWord")
-	public ResponseData getAllWord(@RequestParam("page") Integer pageCurent,
+	public ResponseEntity<ResponseData> getAllWord(@RequestParam("page") Integer pageCurent,
 			@RequestParam(name = "rowPerPage", defaultValue = "0") Integer rowPerPage,
 			@RequestParam("sortBy") String sortBy) throws ParamException {
 //		for (int i = 0; i < 23; i++) {
@@ -62,7 +59,8 @@ public class ApiController extends BaseController {
 		paging.setRowPerPage(rowPerPage);
 		paging.setSortBy(sortBy);
 		setDataResponse(page);
-		return responseData;
+		
+		return new ResponseEntity<ResponseData>(responseData,HttpStatus.OK) ;
 	}
 
 }

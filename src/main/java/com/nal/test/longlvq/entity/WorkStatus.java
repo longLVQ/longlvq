@@ -10,5 +10,5 @@ import lombok.Data;
 @Data
 public class WorkStatus extends BaseEntity {
 	private Integer status;
-	private String statusName;
+	private String statusName; 
 }

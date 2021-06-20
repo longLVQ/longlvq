@@ -12,5 +12,4 @@ public class BaseEntity {
 	@Id
 	@GeneratedValue
     private Long id;
-	
 }
