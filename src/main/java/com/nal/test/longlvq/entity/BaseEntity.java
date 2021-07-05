@@ -11,5 +11,5 @@ import lombok.Data;
 public class BaseEntity {
 	@Id
 	@GeneratedValue
-    private Long id;
+    protected Long id;
 }

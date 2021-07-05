@@ -14,5 +14,5 @@ public class WorkDto {
 	private LocalDate endDate;
 	
 
-	private WorkStatusDto workStatus = new WorkStatusDto();
+	private WorkStatusDto workStatus;
 }

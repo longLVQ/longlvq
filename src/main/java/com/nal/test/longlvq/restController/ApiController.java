@@ -1,9 +1,7 @@
 package com.nal.test.longlvq.restController;
 
-import java.time.LocalDate;
+import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nal.test.longlvq.entity.User;
-import com.nal.test.longlvq.entity.Work;
+import com.nal.test.longlvq.entity.WorkStatus;
 import com.nal.test.longlvq.exception.ParamException;
 import com.nal.test.longlvq.model.ResponseData;
+import com.nal.test.longlvq.repository.StatusRepository;
 import com.nal.test.longlvq.repository.UserRepository;
 import com.nal.test.longlvq.repository.WorkRepository;
 import com.nal.test.longlvq.service.WorkService;
@@ -36,11 +34,13 @@ public class ApiController extends BaseController {
 	
 	private final WorkService workService;
 	
+	private final StatusRepository statusRepository;
+	
 	static {
 	}
 
 	@GetMapping("/getWord")
-	public ResponseEntity<ResponseData> getAllWord(@RequestParam("page") Integer pageCurent,
+	public Object getAllWord(@RequestParam("page") Integer pageCurent,
 			@RequestParam(name = "rowPerPage", defaultValue = "0") Integer rowPerPage,
 			@RequestParam("sortBy") String sortBy) throws ParamException {
 //		for (int i = 0; i < 23; i++) {
@@ -57,6 +57,7 @@ public class ApiController extends BaseController {
 //		user.setPassword(passwordEncoder.encode("123456"));
 //		userRepository.save(user);
 		//System.out.println(user);
+		
 		Sort sort = Sort.by("id");
 		sortHandle(sort, sortBy);
 		
@@ -67,7 +68,15 @@ public class ApiController extends BaseController {
 		setDataResponse();
 		responseData.setData(workService.getWorkList(pageCurent,rowPerPage,sort));	
 		
-		return new ResponseEntity<ResponseData>(responseData,HttpStatus.OK) ;
+		return responseData;
+	}
+	
+	@GetMapping("/getStatus")
+	public ResponseEntity<ResponseData> getAllStatus() {
+		List<WorkStatus> list = statusRepository.findAll();
+		responseData.setData(list);
+		//list.forEach(x -> x.getWorkList().forEach(y -> y.getWorkName()));
+		return new ResponseEntity<ResponseData>(responseData,HttpStatus.OK);
 	}
 
 }

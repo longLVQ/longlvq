@@ -1,6 +1,5 @@
 package com.nal.test.longlvq.entity;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,16 +9,35 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "work_status")
-@Data
-public class WorkStatus  extends BaseEntity {
+public class WorkStatus  extends BaseEntity{
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+
+	public List<Work> getWorkList() {
+		return workList;
+	}
+
+
+	public void setWorkList(List<Work> workList) {
+		this.workList = workList; 
+	}
 
 	@Column(name = "status_name", nullable = true)
-	private String statusName; 
+	private String statusName;  
 	
-	@OneToMany(mappedBy = "workStatus",fetch = FetchType.EAGER)
+	
+	@OneToMany(mappedBy = "workStatus",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = "workStatus")
 	private List<Work> workList;
-}
+} 

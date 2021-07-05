@@ -1,6 +1,5 @@
 package com.nal.test.longlvq.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -10,24 +9,47 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "work")
-@Data
 public class Work extends BaseEntity {
 
 	@Column(name = "work_name", nullable = false)
 	private String workName;
 
-	@Column(name = "start_date", nullable = true)
-	private LocalDate startDate;
 
-	@Column(name = "end_date", nullable = true)
-	private LocalDate endDate;
 	
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="status_id",insertable = false, updatable = false)
+	@JsonIgnoreProperties(value = "workList")
 	private WorkStatus workStatus;
+
+
+	public String getWorkName() {
+		return workName;
+	}
+
+
+	public void setWorkName(String workName) {
+		this.workName = workName;
+	}
+
+
+
+
+	public WorkStatus getWorkStatus() {
+		return workStatus;
+	}
+
+
+
+	public void setWorkStatus(WorkStatus workStatus) {
+		this.workStatus = workStatus;
+	}
+	
+	
 }
